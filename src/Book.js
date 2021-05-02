@@ -1,27 +1,13 @@
 import React from "react";
+import PropTypes from "prop-types";
+import { shelves } from "./App";
 
-class Book extends React.Component() {
-  shelves = [
-    {
-      value: "currentlyReading",
-      label: "Currently Reading",
-    },
-    {
-      value: "wantToRead",
-      label: "Want to Read",
-    },
-    {
-      value: "read",
-      label: "Read",
-    },
-    {
-      value: "none",
-      label: "None",
-    },
-  ];
+
+class Book extends React.Component {
+
   render() {
     return (
-      <div key={book.id} className="book">
+      <div className="book">
         <div className="book-top">
           <div
             className="book-cover"
@@ -37,27 +23,21 @@ class Book extends React.Component() {
           ></div>
           <div className="book-shelf-changer">
             <select>
-            <optgroup label="Move to...">
-              {this.shelves.map((option, idx) => {
-                return (
-                  <option
-                    key={`${option.label}idx`}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                );
-              })}
+              <optgroup label="Move to...">
+                {shelves.map((option, idx) => {
+                  return (
+                    <option key={`${option.label}idx`} value={option.value}>
+                      {option.label}
+                    </option>
+                  );
+                })}
               </optgroup>
-              <option value="move" disabled>
-            
-              </option>
             </select>
           </div>
         </div>
-        <div className="book-title">{this.state.book.title}</div>
+        <div className="book-title">{this.props.book.title}</div>
         <div className="book-authors">
-          {book.authors.map((author) => ({ author }))}
+          {this.props.book.authors.map((author) => { return author })}
         </div>
       </div>
     );
@@ -65,7 +45,7 @@ class Book extends React.Component() {
 }
 
 Book.propTypes = {
-  book: PropTypes.array.isRequired,
+  book: PropTypes.object.isRequired,
 };
 
 export default Book;
