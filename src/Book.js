@@ -40,7 +40,7 @@ class Book extends React.Component {
         </div>
         <div className="book-title">{this.props.book.title}</div>
         <div className="book-authors">
-          {this.props.book.authors.map((author) => {
+          {this.props.book.authors && this.props.book.authors.map((author) => {
             return author;
           })}
         </div>
@@ -50,8 +50,8 @@ class Book extends React.Component {
 }
 
 Book.propTypes = {
+  shelfValue: PropTypes.string,
   updateShelf: PropTypes.func.isRequired,
-  shelfValue: PropTypes.string.isRequired,
   book: PropTypes.object.isRequired,
 };
 

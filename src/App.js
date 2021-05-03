@@ -3,6 +3,9 @@ import "./App.css";
 
 import * as BooksAPI from "./BooksAPI";
 import BookShelf from "./BookShelf";
+import SearchPage from "./SearchPage"
+
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
 export const shelves = [
   {
@@ -23,82 +26,71 @@ export const shelves = [
   },
 ];
 
-
 class BooksApp extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { books: [] };
-  }
+    this.state = { 
+      books: [],
+  }};
 
-  getAllBooks(){
+  getAllBooks() {
     BooksAPI.getAll().then((response) => {
       this.setState({ books: response });
     });
   }
 
   componentDidMount() {
-    this.getAllBooks()
+    this.getAllBooks();
   }
 
   updateShelf = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
-     this.getAllBooks()
+      this.getAllBooks();
     });
-  
   };
 
   render() {
     return (
-      <div className="app">
-        {this.state.showSearchPage ? (
-          <div className="search-books">
-            <div className="search-books-bar">
-              <button
-                className="close-search"
-                onClick={() => this.setState({ showSearchPage: false })}
-              >
-                Close
-              </button>
-              <div className="search-books-input-wrapper">
-                <input type="text" placeholder="Search by title or author" />
+      <Router>
+        <div className="app">
+        <Switch>
+          <Route exact path="/search">
+            <SearchPage books={this.state.books} updateShelf={this.updateShelf}/>
+          </Route>
+          <Route exact path="/">
+            <div className="list-books">
+              <div className="list-books-title">
+                <h1>MyReads</h1>
+              </div>
+              <div className="list-books-content">
+                <div>
+                  {shelves.map((shelf) => {
+                    if (shelf.value === "none") {
+                      return "";
+                    }
+                    return (
+                      <BookShelf
+                        key={shelf.value}
+                        shelf={shelf}
+                        updateShelf={this.updateShelf}
+                        books={this.state.books.filter(
+                          (book) => book.shelf === shelf.value
+                        )}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="open-search">
+                <Link to="/search">
+                  <button>Add a book</button>
+                </Link>
               </div>
             </div>
-            <div className="search-books-results">
-              <ol className="books-grid"></ol>
-            </div>
-          </div>
-        ) : (
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <div className="list-books-content">
-              <div>
-                {shelves.map((shelf) => {
-                  if (shelf.value === "none") {
-                    return "";
-                  }
-                  return (
-                    <BookShelf
-                      key={shelf.value}
-                      shelf={shelf}
-                      updateShelf={this.updateShelf}
-                      books={this.state.books.filter(
-                        (book) => book.shelf === shelf.value
-                      )}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-            <div className="open-search">
-              <button onClick={() => this.setState({ showSearchPage: true })}>
-                Add a book
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+          </Route>
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
