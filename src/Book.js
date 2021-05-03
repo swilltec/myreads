@@ -22,8 +22,9 @@ class Book extends React.Component {
           <div className="book-shelf-changer">
             <select
               value={this.props.shelfValue}
-              onChange={(e) =>
+              onChange={(e) =>{
                 this.props.updateShelf(this.props.book, e.target.value)
+                alert(`You have successfull update the shelf of ${this.props.book.title}`)}
               }
             >
               <optgroup label="Move to...">

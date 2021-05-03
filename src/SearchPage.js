@@ -25,9 +25,7 @@ class SearchPage extends React.Component {
     }
   }
 
-  swapBook(book, library){
-
-  }
+  swapBook(book, library) {}
 
   render() {
     return (
@@ -52,7 +50,9 @@ class SearchPage extends React.Component {
             {this.state.result &&
               this.state.query &&
               this.state.result.map((bookItem) => {
-                const findBook =this.props.books.find((b) => b.id === bookItem.id);
+                const findBook = this.props.books.find(
+                  (b) => b.id === bookItem.id
+                );
                 const bookShelf = findBook ? findBook.shelf : "none";
                 return (
                   <li key={bookItem.id}>
@@ -64,6 +64,13 @@ class SearchPage extends React.Component {
                   </li>
                 );
               })}
+
+            {this.state.query === "" && 
+              <li> Enter search keyword </li>
+            }
+            {this.state.result.length === 0 && this.state.query.length > 0 && 
+              <li> No matched result</li>
+            }
           </ol>
         </div>
       </div>
